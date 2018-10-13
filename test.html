@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="echarts.min.js"></script>
+    <title>Document</title>
+    <script type="text/javascript">
+//ajax获取后台数据
+        function redata(){
+            var s="";
+            if(window.XMLHttpRequest)
+            {
+                xmlhttp = new XMLHttpRequest();
+            }
+            else if (window.ActiveXObject)
+            {
+                try
+                {
+                    xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+                }
+                catch (e)
+                {
+                    try
+                    {
+                        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                    }
+                    catch (e)
+                    {
+                    }
+                }
+            }
+
+            xmlhttp.open('GET','file.php',true);
+            xmlhttp.onreadystatechange=function(){
+                if(xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                    f1(xmlhttp.responseText);
+
+
+                }
+            }
+            xmlhttp.send(null);
+
+        }
+        //执行函数redata
+        redata();
+        //处理返回数据
+        function f1(str) {
+            var s=str.split("+");
+            var s1=s[0].substr(1).split(",");
+            var s2=s[1].substr(1).split(",");
+            creat_chart(s1,s2)
+        }
+        //设计图标样式
+        function creat_chart(s1,s2) {
+            var mychart=echarts.init(document.getElementById("main"));
+            var option={
+                title:{
+                    text:"日期统计"
+                },
+                tooltip:{},
+                legend:{
+                    data:["次数"]
+                },
+                xAxis:{
+                    data:s1
+                },
+                yAxis:{ },
+                dataZoom: [
+                    {   // 这个dataZoom组件，默认控制x轴。
+                        type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件
+                        start: 0,      // 左边在 0% 的位置。
+                        end: 100         // 右边在 100% 的位置。
+                    }],
+                series:[{
+                    name:'次数',
+                    type:'bar',
+                    data:s2
+                }]
+            };
+            mychart.setOption(option);
+        }
+
+
+    </script>
+</head>
+<body>
+<!--//图表区域-->
+<div id="main" style="width: 1000px; height: 400px">
+</div>
+
+</body>
+</html>
